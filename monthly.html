@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Cost Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div></div> <!-- Empty div for spacing -->
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+        
+        <h1>Fuel Cost Calculator</h1>
+        <p class="subtitle">Calculate your vehicle's fuel expenses across different time periods</p>
+        
+        <div class="calculator">
+            <div class="form-group">
+                <label for="vehicleType">Vehicle Type</label>
+                <select id="vehicleType">
+                    <option value="bike">Bike/Scooter</option>
+                    <option value="auto">Auto Rickshaw</option>
+                    <option value="car">Car</option>
+                    <option value="truck">Truck</option>
+                    <option value="suv">SUV</option>
+                </select>
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="fuelType">Fuel Type</label>
+                <select id="fuelType">
+                    <option value="petrol">Petrol</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="cng">CNG</option>
+                    <option value="lpg">LPG</option>
+                    <option value="electric">Electric</option>
+                </select>
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="fuelPrice">Fuel Price (per unit)</label>
+                <input type="number" id="fuelPrice" min="0" placeholder="Enter price per unit">
+
+            </div>
+            
+            <div class="form-group">
+                <label for="currency">Currency</label>
+                <select id="currency">
+                    <option value="₹">Indian Rupee (₹)</option>
+                    <option value="$">US Dollar ($)</option>
+                    <option value="€">Euro (€)</option>
+                    <option value="£">British Pound (£)</option>
+                    <option value="¥">Japanese Yen (¥)</option>
+                    <option value="A$">Australian Dollar (A$)</option>
+                    <option value="C$">Canadian Dollar (C$)</option>
+                    <option value="R">South African Rand (R)</option>
+                    <option value="AED">UAE Dirham (AED)</option>
+                    <option value="SAR">Saudi Riyal (SAR)</option>
+                </select>
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="dailyKm">Daily Distance (km)</label>
+                <input type="number" id="dailyKm" value="20" min="1">
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="mileage">
+                    <span>Mileage 
+                        <span class="tooltip">
+                            <i class="fas fa-info-circle" style="color: var(--text-light); font-size: 0.8rem;"></i>
+                            <span class="tooltiptext">Leave blank to use average mileage for your vehicle type</span>
+                        </span>
+                    </span>
+                </label>
+                <input type="number" id="mileage" placeholder="Leave blank for average">
+                <small id="mileageUnit">km per liter</small>
+            </div>
+            
+            <button id="calculateBtn" onclick="calculateFuelCost()">
+                <i class="fas fa-calculator"></i> Calculate Fuel Cost
+            </button>
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Calculation complete! Scroll down to view results.
+            </div>
+            
+            <div class="result" id="result">
+                <h3><i class="fas fa-chart-line"></i> Your Estimated Fuel Costs</h3>
+                
+                <div class="cost-item fade-in">
+                    <span class="cost-label"><i class="fas fa-calendar-day"></i> Daily Fuel Cost:</span>
+                    <span class="cost-value"><span id="currencySymbol1"></span><span id="dailyCost">0</span></span>
+                </div>
+                
+                <div class="cost-item fade-in" style="animation-delay: 0.1s;">
+                    <span class="cost-label"><i class="fas fa-calendar-week"></i> Weekly Fuel Cost (7 days):</span>
+                    <span class="cost-value"><span id="currencySymbol2"></span><span id="weeklyCost">0</span></span>
+                </div>
+                
+                <div class="cost-item fade-in" style="animation-delay: 0.2s;">
+                    <span class="cost-label"><i class="fas fa-calendar-alt"></i> Monthly Fuel Cost (30 days):</span>
+                    <span class="cost-value"><span id="currencySymbol3"></span><span id="monthlyCost">0</span></span>
+                </div>
+                
+                <div class="cost-item fade-in" style="animation-delay: 0.3s;">
+                    <span class="cost-label"><i class="fas fa-calendar"></i> Yearly Fuel Cost (365 days):</span>
+                    <span class="cost-value"><span id="currencySymbol4"></span><span id="yearlyCost">0</span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Made with <i class="fas fa-heart" style="color: var(--error-color);"></i> for drivers worldwide</p>
+            <p>By Akshath</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

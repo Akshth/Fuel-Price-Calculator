@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Calculator - Single Trip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="back-button" onclick="window.location.href='home.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+        
+        <h1>Single Trip Calculator</h1>
+        <p class="subtitle">Calculate fuel cost for your one-time journey</p>
+        
+        <div class="calculator">
+            <div class="form-group">
+                <label for="fuelType">Fuel Type</label>
+                <select id="fuelType">
+                    <option value="petrol">Petrol</option>
+                    <option value="diesel">Diesel</option>
+                    <option value="cng">CNG</option>
+                    <option value="lpg">LPG</option>
+                    <option value="electric">Electric</option>
+                </select>
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="fuelPrice">Fuel Price (per unit)</label>
+                <input type="number" id="fuelPrice" min="0" placeholder="Enter price per unit">
+            </div>
+            
+            <div class="form-group">
+                <label for="currency">Currency</label>
+                <select id="currency">
+                    <option value="₹">Indian Rupee (₹)</option>
+                    <option value="$">US Dollar ($)</option>
+                    <option value="€">Euro (€)</option>
+                    <option value="£">British Pound (£)</option>
+                    <option value="¥">Japanese Yen (¥)</option>
+                    <option value="A$">Australian Dollar (A$)</option>
+                    <option value="C$">Canadian Dollar (C$)</option>
+                    <option value="R">South African Rand (R)</option>
+                    <option value="AED">UAE Dirham (AED)</option>
+                    <option value="SAR">Saudi Riyal (SAR)</option>
+                </select>
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="tripDistance">Trip Distance (km)</label>
+                <input type="number" id="tripDistance" value="100" min="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="mileage">
+                    <span>Mileage 
+                        <span class="tooltip">
+                            <i class="fas fa-info-circle" style="color: var(--text-light); font-size: 0.8rem;"></i>
+                            <span class="tooltiptext">Enter your vehicle's mileage for accurate calculation</span>
+                        </span>
+                    </span>
+                </label>
+                <input type="number" id="mileage" placeholder="Enter your vehicle mileage">
+                <small id="mileageUnit">km per liter</small>
+            </div>
+            
+            <button id="calculateBtn" onclick="calculateTripCost()">
+                <i class="fas fa-calculator"></i> Calculate Trip Cost
+            </button>
+            <div class="error-message" id="errorMessage"></div>
+            
+            <div class="result" id="result">
+                <h3><i class="fas fa-receipt"></i> Your Trip Cost</h3>
+                
+                <div class="cost-item fade-in">
+                    <span class="cost-label"><i class="fas fa-gas-pump"></i> Fuel Needed:</span>
+                    <span class="cost-value"><span id="fuelNeeded">0</span> <span id="fuelUnit">liters</span></span>
+                </div>
+                
+                <div class="cost-item fade-in" style="animation-delay: 0.1s;">
+                    <span class="cost-label"><i class="fas fa-money-bill-wave"></i> Total Cost:</span>
+                    <span class="cost-value"><span id="currencySymbol"></span><span id="tripCost">0</span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Made with <i class="fas fa-heart" style="color: var(--error-color);"></i> for drivers worldwide</p>
+            <p>By Akshath</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Update mileage unit based on fuel type
+        function updateMileageUnit() {
+            const fuelType = document.getElementById('fuelType').value;
+            const unitElement = document.getElementById('mileageUnit');
+            const fuelUnitElement = document.getElementById('fuelUnit');
+            
+            if (fuelType === 'cng') {
+                unitElement.textContent = 'km per kg';
+                fuelUnitElement.textContent = 'kg';
+            } else if (fuelType === 'electric') {
+                unitElement.textContent = 'km per kWh';
+                fuelUnitElement.textContent = 'kWh';
+            } else {
+                unitElement.textContent = 'km per liter';
+                fuelUnitElement.textContent = 'liters';
+            }
+        }
+        
+        // Show error message to user
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            
+            errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            errorElement.style.display = 'block';
+            
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Calculate trip costs
+        function calculateTripCost() {
+            // Get user inputs
+            const fuelType = document.getElementById('fuelType').value;
+            const fuelPrice = parseFloat(document.getElementById('fuelPrice').value);
+            const tripDistance = parseFloat(document.getElementById('tripDistance').value) || 0;
+            const currency = document.getElementById('currency').value;
+            const mileage = parseFloat(document.getElementById('mileage').value);
+            
+            // Validate inputs
+            if (isNaN(fuelPrice) || fuelPrice <= 0) {
+                showError("Please enter a valid fuel price");
+                return;
+            }
+            
+            if (tripDistance <= 0) {
+                showError("Please enter a valid trip distance");
+                return;
+            }
+            
+            if (!mileage || mileage <= 0) {
+                showError("Please enter your vehicle's mileage");
+                return;
+            }
+            
+            // Calculate costs
+            const fuelNeeded = tripDistance / mileage;
+            const tripCost = fuelNeeded * fuelPrice;
+            
+            // Update currency symbol
+            document.getElementById('currencySymbol').textContent = currency;
+            
+            // Display results
+            document.getElementById('fuelNeeded').textContent = fuelNeeded.toFixed(2);
+            document.getElementById('tripCost').textContent = tripCost.toFixed(2);
+            
+            // Show result section with animation
+            const resultElement = document.getElementById('result');
+            resultElement.style.display = 'block';
+            
+            // Reset animations
+            const costItems = document.querySelectorAll('.cost-item');
+            costItems.forEach(item => {
+                item.style.animation = 'none';
+                void item.offsetHeight; // Trigger reflow
+                item.style.animation = '';
+            });
+        }
+        
+        // Initialize - set up event listeners
+        window.onload = function() {
+            checkTheme();
+            updateMileageUnit();
+            
+            // Set up event listeners
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('fuelType').addEventListener('change', updateMileageUnit);
+            document.getElementById('fuelPrice').focus();
+            
+            // Add animation to calculator on load
+            const calculator = document.querySelector('.calculator');
+            calculator.style.opacity = 0;
+            calculator.style.transform = 'translateY(20px)';
+            calculator.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            setTimeout(() => {
+                calculator.style.opacity = 1;
+                calculator.style.transform = 'translateY(0)';
+            }, 100);
+        };
+    </script>
+</body>
+</html>

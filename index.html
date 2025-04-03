@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Calculator - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .option-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .option-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+        
+        .option-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .option-card h2 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .option-card p {
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div></div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+        
+        <h1>Fuel Calculator</h1>
+        <p class="subtitle">Choose the type of calculation you need</p>
+        
+        <div class="option-cards">
+            <div class="option-card" onclick="window.location.href='single-trip.html'">
+                
+                <h2>Single Trip Calculator</h2>
+                <p>Calculate fuel cost for a one-time journey</p>
+            </div>
+            
+            <div class="option-card" onclick="window.location.href='monthly.html'">
+                
+                <h2>Monthly Calculator</h2>
+                <p>Calculate your regular monthly fuel expenses</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Made with <i class="fas fa-heart" style="color: var(--error-color);"></i> for drivers worldwide</p>
+            <p>By Akshath</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
